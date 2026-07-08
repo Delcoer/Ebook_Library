@@ -1,0 +1,7 @@
+# SQLite Datenbank-Dateien ignorieren
+*.db
+*.sqlite
+*.sqlite3
+
+# Maven Build-Ordner ignorieren
+target/

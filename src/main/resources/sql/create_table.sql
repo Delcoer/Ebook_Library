@@ -1,0 +1,47 @@
+
+-- Stammdaten Tabellen anlegen
+
+CREATE TABLE Autor (id INTEGER PRIMARY KEY AUTOINCREMENT, vorname TEXT, nachname TEXT NOT NULL);
+CREATE TABLE Verlag (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL UNIQUE);
+CREATE TABLE Tag (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL UNIQUE);
+CREATE TABLE Dateiformat (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL UNIQUE);
+CREATE TABLE Sammlung (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL UNIQUE);
+
+-- Alle Detailtabellen erstellen
+
+CREATE TABLE EBook (
+    id INTEGER PRIMARY KEY AUTOINCREMENT, titel TEXT NOT NULL, isbn TEXT UNIQUE, datei_pfad TEXT NOT NULL UNIQUE,
+    dateiformat_id INTEGER NOT NULL, cover_pfad TEXT, lesestatus TEXT NOT NULL, bewertung INTEGER,
+    seiten_anzahl INTEGER, hinzugefuegt_am TEXT NOT NULL, verlag_id INTEGER,
+    FOREIGN KEY (dateiformat_id) REFERENCES Dateiformat(id), FOREIGN KEY (verlag_id) REFERENCES Verlag(id)
+);
+
+CREATE TABLE Markierung (
+    id INTEGER PRIMARY KEY AUTOINCREMENT, ebook_id INTEGER NOT NULL, seite INTEGER, markierter_text TEXT NOT NULL,
+    notiz_text TEXT, farbe TEXT, erstellt_am TEXT NOT NULL, FOREIGN KEY (ebook_id) REFERENCES EBook(id) ON DELETE CASCADE
+);
+
+CREATE TABLE Lesezeichen (
+    id INTEGER PRIMARY KEY AUTOINCREMENT, ebook_id INTEGER NOT NULL, seite INTEGER NOT NULL, titel TEXT,
+    erstellt_am TEXT NOT NULL, FOREIGN KEY (ebook_id) REFERENCES EBook(id) ON DELETE CASCADE
+);
+
+CREATE TABLE Notiz (
+    id INTEGER PRIMARY KEY AUTOINCREMENT, ebook_id INTEGER NOT NULL, seite INTEGER, notiz_text TEXT NOT NULL,
+    erstellt_am TEXT NOT NULL, FOREIGN KEY (ebook_id) REFERENCES EBook(id) ON DELETE CASCADE
+);
+
+CREATE TABLE EBook_Sammlung (
+    ebook_id INTEGER NOT NULL, sammlung_id INTEGER NOT NULL, PRIMARY KEY (ebook_id, sammlung_id),
+    FOREIGN KEY (ebook_id) REFERENCES EBook(id) ON DELETE CASCADE, FOREIGN KEY (sammlung_id) REFERENCES Sammlung(id) ON DELETE CASCADE
+);
+
+CREATE TABLE EBook_Autor (
+    ebook_id INTEGER NOT NULL, autor_id INTEGER NOT NULL, PRIMARY KEY (ebook_id, autor_id),
+    FOREIGN KEY (ebook_id) REFERENCES EBook(id) ON DELETE CASCADE, FOREIGN KEY (autor_id) REFERENCES Autor(id) ON DELETE CASCADE
+);
+
+CREATE TABLE EBook_Tag (
+    ebook_id INTEGER NOT NULL, tag_id INTEGER NOT NULL, PRIMARY KEY (ebook_id, tag_id),
+    FOREIGN KEY (ebook_id) REFERENCES EBook(id) ON DELETE CASCADE, FOREIGN KEY (tag_id) REFERENCES Tag(id) ON DELETE CASCADE
+);
