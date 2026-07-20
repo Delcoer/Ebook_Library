@@ -4,7 +4,7 @@ Ein JavaFX-basiertes Desktop-Anwendungsprojekt zur Verwaltung und Interaktion mi
 
 ---
 
-## 🛠️ Tech Stack & Voraussetzungen
+## Tech Stack & Voraussetzungen
 
 * **Programmiersprache:** Java 21
 * **Framework:** JavaFX 21 (UI)
@@ -14,7 +14,7 @@ Ein JavaFX-basiertes Desktop-Anwendungsprojekt zur Verwaltung und Interaktion mi
 
 ---
 
-## 🚀 Projekt starten & Technische Hintergründe
+## Projekt starten & Technische Hintergründe
 
 Da JavaFX ein modulares Framework ist, schreibt es strenge Sicherheits- und Modulgrenzen (JPMS) vor. Eine Standard-Java-Anwendung sucht Bibliotheken im normalen Klassenpfad, was bei JavaFX zu dem bekannten Fehler führt, dass Laufzeitkomponenten fehlen. JavaFX benötigt zwingend einen **Modulpfad** (`--module-path`) und die Angabe der zu ladenden Module (`--add-modules javafx.controls,javafx.fxml`).
 
