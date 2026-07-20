@@ -1,16 +1,16 @@
 package kevin.teko.model;
 
-public class Note {
+public class Bookmark {
     private int id;
     private int eBookId;
-    private Integer page;
-    private String noteText;
+    private int page;
+    private String title;
     private String createdAt;
 
-    public Note(int eBookId, Integer page, String noteText, String createdAt) {
+    public Bookmark(int eBookId, int page, String title, String createdAt) {
         this.eBookId = eBookId;
         this.page = page;
-        this.noteText = noteText;
+        this.title = title;
         this.createdAt = createdAt;
     }
 
@@ -30,20 +30,20 @@ public class Note {
         this.eBookId = eBookId;
     }
 
-    public Integer getPage() {
+    public int getPage() {
         return page;
     }
 
-    public void setPage(Integer page) {
+    public void setPage(int page) {
         this.page = page;
     }
 
-    public String getNoteText() {
-        return noteText;
+    public String getTitle() {
+        return title;
     }
 
-    public void setNoteText(String noteText) {
-        this.noteText = noteText;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getCreatedAt() {
