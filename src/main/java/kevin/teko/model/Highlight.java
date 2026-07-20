@@ -1,77 +1,74 @@
 package kevin.teko.model;
 
 public class Highlight {
-    private int id;
-    private int eBookId;
-    private Integer page;
-    private String highlightedText;
-    private String noteText;
-    private String color;
-    private String createdAt;
+    private Integer id;
+    private Integer ebookId;
+    private String text;
+    private int pageNumber;
 
-    public Highlight(int eBookId, Integer page, String highlightedText, String noteText, String color,
-            String createdAt) {
-        this.eBookId = eBookId;
-        this.page = page;
-        this.highlightedText = highlightedText;
-        this.noteText = noteText;
-        this.color = color;
-        this.createdAt = createdAt;
+    /**
+     * Konstruktor 1: Für NEUE Highlights (wird in der GUI erstellt).
+     * Die ID bleibt vorerst null, da die DB diese später generiert.
+     */
+    public Highlight(Integer ebookId, String text, int pageNumber) {
+        this.id = null;
+        setEbookId(ebookId);
+        setText(text);
+        setPageNumber(pageNumber);
     }
 
-    public int getId() {
+    /**
+     * Konstruktor 2: Für EXISTIERENDE Highlights (aus der Datenbank geladen).
+     * Hier muss die ID zwingend vorhanden sein.
+     */
+    public Highlight(int id, Integer ebookId, String text, int pageNumber) {
+        setId(id);
+        setEbookId(ebookId);
+        setText(text);
+        setPageNumber(pageNumber);
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
+        if (id != null && id <= 0) {
+            throw new IllegalArgumentException("Die Highlight-ID muss größer als 0 sein.");
+        }
         this.id = id;
     }
 
-    public int getEBookId() {
-        return eBookId;
+    public Integer getEbookId() {
+        return ebookId;
     }
 
-    public void setEBookId(int eBookId) {
-        this.eBookId = eBookId;
+    public void setEbookId(Integer ebookId) {
+        if (ebookId == null || ebookId <= 0) {
+            throw new IllegalArgumentException("Das Highlight muss einer gültigen E-Book-ID zugeordnet sein.");
+        }
+        this.ebookId = ebookId;
     }
 
-    public Integer getPage() {
-        return page;
+    public String getText() {
+        return text;
     }
 
-    public void setPage(Integer page) {
-        this.page = page;
+    public void setText(String text) {
+        if (text == null || text.trim().isEmpty()) {
+            throw new IllegalArgumentException("Der markierte Text darf nicht leer sein.");
+        }
+        this.text = text.trim();
     }
 
-    public String getHighlightedText() {
-        return highlightedText;
+    public int getPageNumber() {
+        return pageNumber;
     }
 
-    public void setHighlightedText(String highlightedText) {
-        this.highlightedText = highlightedText;
-    }
-
-    public String getNoteText() {
-        return noteText;
-    }
-
-    public void setNoteText(String noteText) {
-        this.noteText = noteText;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
+    public void setPageNumber(int pageNumber) {
+        if (pageNumber <= 0) {
+            throw new IllegalArgumentException("Die Seitenzahl muss mindestens 1 sein.");
+        }
+        this.pageNumber = pageNumber;
     }
 }
