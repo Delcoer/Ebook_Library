@@ -13,17 +13,42 @@ public class EBook {
     private String addedAt;
     private Integer publisherId;
 
-    public EBook(String title, String isbn, String filePath, int fileFormatId, String coverPath, String readingStatus, int rating, int pageCount, String addedAt, Integer publisherId) {
-        this.title = title;
-        this.isbn = isbn;
-        this.filePath = filePath;
-        this.fileFormatId = fileFormatId;
-        this.coverPath = coverPath;
-        this.readingStatus = readingStatus;
-        this.rating = rating;
-        this.pageCount = pageCount;
-        this.addedAt = addedAt;
-        this.publisherId = publisherId;
+    /**
+     * Konstruktor 1: Für NEUE E-Books (ohne ID).
+     * Die ID wird automatisch auf 0 gesetzt und später von der DB per Auto-Increment vergeben.
+     */
+    public EBook(String title, String isbn, String filePath, int fileFormatId, String coverPath, String readingStatus,
+            int rating, int pageCount, String addedAt, Integer publisherId) {
+        setId(0); // Neu, noch nicht in der Datenbank
+        setTitle(title);
+        setIsbn(isbn);
+        setFilePath(filePath);
+        setFileFormatId(fileFormatId);
+        setCoverPath(coverPath);
+        setReadingStatus(readingStatus);
+        setRating(rating);
+        setPageCount(pageCount);
+        setAddedAt(addedAt);
+        setPublisherId(publisherId);
+    }
+
+    /**
+     * Konstruktor 2: Für BESTEHENDE E-Books (mit ID).
+     * Wird vom Data Access Object genutzt, wenn Daten aus der Datenbank geladen werden.
+     */
+    public EBook(int id, String title, String isbn, String filePath, int fileFormatId, String coverPath, String readingStatus,
+            int rating, int pageCount, String addedAt, Integer publisherId) {
+        setId(id);
+        setTitle(title);
+        setIsbn(isbn);
+        setFilePath(filePath);
+        setFileFormatId(fileFormatId);
+        setCoverPath(coverPath);
+        setReadingStatus(readingStatus);
+        setRating(rating);
+        setPageCount(pageCount);
+        setAddedAt(addedAt);
+        setPublisherId(publisherId);
     }
 
     public int getId() {
@@ -31,6 +56,9 @@ public class EBook {
     }
 
     public void setId(int id) {
+        if (id < 0) {
+            throw new IllegalArgumentException("Die ID darf nicht negativ sein.");
+        }
         this.id = id;
     }
 
@@ -39,6 +67,9 @@ public class EBook {
     }
 
     public void setTitle(String title) {
+        if (title == null || title.trim().isEmpty()) {
+            throw new IllegalArgumentException("Der Titel kann nicht leer sein.");
+        }
         this.title = title;
     }
 
@@ -47,6 +78,17 @@ public class EBook {
     }
 
     public void setIsbn(String isbn) {
+        if (isbn == null || isbn.trim().isEmpty()) {
+            this.isbn = null;
+            return;
+        }
+
+        String cleanIsbn = isbn.replaceAll("[\\s-]", "");
+
+        if (!cleanIsbn.matches("\\d{9}[0-9Xx]") && !cleanIsbn.matches("\\d{13}")) {
+            throw new IllegalArgumentException("Ungültiges ISBN-Format. Erwartet werden 10 oder 13 Ziffern.");
+        }
+
         this.isbn = isbn;
     }
 
@@ -55,6 +97,9 @@ public class EBook {
     }
 
     public void setFilePath(String filePath) {
+        if (filePath == null || filePath.trim().isEmpty()) {
+            throw new IllegalArgumentException("Der Dateipfad darf nicht null oder leer sein.");
+        }
         this.filePath = filePath;
     }
 
@@ -63,6 +108,9 @@ public class EBook {
     }
 
     public void setFileFormatId(int fileFormatId) {
+        if (fileFormatId < 1) {
+            throw new IllegalArgumentException("Die Dateiformat-ID muss eine gültige positive Zahl sein.");
+        }
         this.fileFormatId = fileFormatId;
     }
 
@@ -71,6 +119,9 @@ public class EBook {
     }
 
     public void setCoverPath(String coverPath) {
+        if (coverPath != null && coverPath.trim().isEmpty()) {
+            throw new IllegalArgumentException("Der Cover-Pfad darf nicht leer sein, wenn er angegeben wird.");
+        }
         this.coverPath = coverPath;
     }
 
@@ -79,7 +130,19 @@ public class EBook {
     }
 
     public void setReadingStatus(String readingStatus) {
-        this.readingStatus = readingStatus;
+        if (readingStatus == null || readingStatus.trim().isEmpty()) {
+            throw new IllegalArgumentException("Der Lesestatus darf nicht null oder leer sein.");
+        }
+
+        String upperStatus = readingStatus.toUpperCase().trim();
+
+        if (!upperStatus.equals("NOT_STARTED") &&
+                !upperStatus.equals("READING") &&
+                !upperStatus.equals("COMPLETED")) {
+            throw new IllegalArgumentException("Ungültiger Lesestatus. Erlaubt sind: NOT_STARTED, READING, COMPLETED.");
+        }
+
+        this.readingStatus = upperStatus;
     }
 
     public int getRating() {
@@ -87,6 +150,9 @@ public class EBook {
     }
 
     public void setRating(int rating) {
+        if (rating < 0 || rating > 5) {
+            throw new IllegalArgumentException("Die Bewertung muss zwischen 0 und 5 liegen.");
+        }
         this.rating = rating;
     }
 
@@ -95,6 +161,9 @@ public class EBook {
     }
 
     public void setPageCount(int pageCount) {
+        if (pageCount < 1) {
+            throw new IllegalArgumentException("Die Seitenzahl muss über 0 sein.");
+        }
         this.pageCount = pageCount;
     }
 
@@ -103,6 +172,9 @@ public class EBook {
     }
 
     public void setAddedAt(String addedAt) {
+        if (addedAt == null || addedAt.trim().isEmpty()) {
+            throw new IllegalArgumentException("Das Hinzufügedatum darf nicht null oder leer sein.");
+        }
         this.addedAt = addedAt;
     }
 
@@ -111,6 +183,10 @@ public class EBook {
     }
 
     public void setPublisherId(Integer publisherId) {
+        // Null-Check verhindert die NullPointerException beim Unboxing
+        if (publisherId != null && publisherId < 1) {
+            throw new IllegalArgumentException("Die Publisher-ID muss eine gültige positive Zahl sein.");
+        }
         this.publisherId = publisherId;
     }
 }
