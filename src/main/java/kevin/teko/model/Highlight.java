@@ -3,29 +3,34 @@ package kevin.teko.model;
 public class Highlight {
     private Integer id;
     private Integer ebookId;
-    private String text;
     private int pageNumber;
+    private String selectedText;
+    private String color;
+    private String createdAt;
 
     /**
      * Konstruktor 1: Für NEUE Highlights (wird in der GUI erstellt).
      * Die ID bleibt vorerst null, da die DB diese später generiert.
      */
-    public Highlight(Integer ebookId, String text, int pageNumber) {
-        this.id = null;
-        setEbookId(ebookId);
-        setText(text);
-        setPageNumber(pageNumber);
+    public Highlight(int ebookId, int page, String selectedText, String color) {
+        setId(null);
+        setEBookId(ebookId);
+        setPageNumber(page);
+        setSelectedText(selectedText);
+        setColor(color);
+        setCreatedAt(null);
     }
-
     /**
      * Konstruktor 2: Für EXISTIERENDE Highlights (aus der Datenbank geladen).
      * Hier muss die ID zwingend vorhanden sein.
      */
-    public Highlight(int id, Integer ebookId, String text, int pageNumber) {
+    public Highlight(int id, int ebookId, int page, String selectedText, String color, String createdAt) {
         setId(id);
-        setEbookId(ebookId);
-        setText(text);
-        setPageNumber(pageNumber);
+        setEBookId(ebookId);
+        setPageNumber(page);
+        setSelectedText(selectedText);
+        setColor(color);
+        setCreatedAt(createdAt);
     }
 
     public Integer getId() {
@@ -39,26 +44,19 @@ public class Highlight {
         this.id = id;
     }
 
-    public Integer getEbookId() {
+    public Integer getEBookId() {
         return ebookId;
     }
 
-    public void setEbookId(Integer ebookId) {
+    public void setEBookId(Integer ebookId) {
         if (ebookId == null || ebookId <= 0) {
             throw new IllegalArgumentException("Das Highlight muss einer gültigen E-Book-ID zugeordnet sein.");
         }
         this.ebookId = ebookId;
     }
 
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        if (text == null || text.trim().isEmpty()) {
-            throw new IllegalArgumentException("Der markierte Text darf nicht leer sein.");
-        }
-        this.text = text.trim();
+    public int getPage() {
+        return pageNumber;
     }
 
     public int getPageNumber() {
@@ -70,5 +68,37 @@ public class Highlight {
             throw new IllegalArgumentException("Die Seitenzahl muss mindestens 1 sein.");
         }
         this.pageNumber = pageNumber;
+    }
+
+    public String getSelectedText() {
+        return selectedText;
+    }
+
+    public void setSelectedText(String selectedText) {
+        if (selectedText == null || selectedText.trim().isEmpty()) {
+            throw new IllegalArgumentException("Der hervorgehobene Text darf nicht leer sein.");
+        }
+        this.selectedText = selectedText.trim();
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        // Fallback auf Standardfarbe (z.B. gelb), falls keine Farbe gewählt wurde
+        if (color == null || color.trim().isEmpty()) {
+            this.color = "#FFFF00"; // Standard Gelb
+        } else {
+            this.color = color.trim();
+        }
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 }

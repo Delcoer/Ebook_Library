@@ -9,7 +9,7 @@ public class Publisher {
      * Die ID bleibt vorerst null, da die DB diese später generiert.
      */
     public Publisher(String name) {
-        this.id = null;
+        setId(null);
         setName(name);
     }
 

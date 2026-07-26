@@ -4,25 +4,31 @@ public class Bookmark {
     private Integer id;
     private Integer ebookId;
     private int pageNumber;
+    private String title;
+    private String createdAt;
 
     /**
      * Konstruktor 1: Für NEUE Lesezeichen (wird in der GUI erstellt).
      * Die ID bleibt vorerst null, da die DB diese später generiert.
      */
-    public Bookmark(Integer ebookId, int pageNumber) {
-        this.id = null;
-        setEbookId(ebookId);
-        setPageNumber(pageNumber);
+    public Bookmark(int ebookId, int page, String title) {
+        setId(null);
+        setEBookId(ebookId);
+        setPage(page);
+        setTitle(title);
+        setCreatedAt(null);
     }
 
     /**
      * Konstruktor 2: Für EXISTIERENDE Lesezeichen (aus der Datenbank geladen).
      * Hier muss die ID zwingend vorhanden sein.
      */
-    public Bookmark(int id, Integer ebookId, int pageNumber) {
+    public Bookmark(int id, int ebookId, int page, String title, String createdAt) {
         setId(id);
-        setEbookId(ebookId);
-        setPageNumber(pageNumber);
+        setEBookId(ebookId);
+        setPage(page);
+        setTitle(title);
+        setCreatedAt(createdAt);
     }
 
     public Integer getId() {
@@ -40,21 +46,42 @@ public class Bookmark {
         return ebookId;
     }
 
-    public void setEbookId(Integer ebookId) {
+    public void setTitle(String title) {
+        // Titel ist optional – wenn leer, wird er als null gespeichert
+        if (title != null && title.trim().isEmpty()) {
+            this.title = null;
+        } else {
+            this.title = title != null ? title.trim() : null;
+        }
+    }
+
+    public void setEBookId(Integer ebookId) {
         if (ebookId == null || ebookId <= 0) {
             throw new IllegalArgumentException("Das Lesezeichen muss einer gültigen E-Book-ID zugeordnet sein.");
         }
         this.ebookId = ebookId;
     }
 
-    public int getPageNumber() {
+    public int getPage() {
         return pageNumber;
     }
 
-    public void setPageNumber(int pageNumber) {
+    public void setPage(int pageNumber) {
         if (pageNumber <= 0) {
             throw new IllegalArgumentException("Die Seitenzahl muss mindestens 1 sein.");
         }
         this.pageNumber = pageNumber;
+    }
+
+    public String getTitle() { // WAR GEFEHLT: Getter für den Titel hinzugefügt
+        return title;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 }

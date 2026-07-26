@@ -10,7 +10,7 @@ public class Collection {
      * Die ID bleibt vorerst null, da die DB diese später generiert.
      */
     public Collection(String name, String description) {
-        this.id = null;
+        setId(null);
         setName(name);
         setDescription(description);
     }

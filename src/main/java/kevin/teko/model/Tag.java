@@ -9,7 +9,7 @@ public class Tag {
      * Die ID bleibt vorerst null, da die DB diese später generiert.
      */
     public Tag(String name) {
-        this.id = null;
+        setId(null);
         setName(name);
     }
 

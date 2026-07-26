@@ -1,7 +1,7 @@
 package kevin.teko.model;
 
 public class EBook {
-    private int id;
+    private Integer id;
     private String title;
     private String isbn;
     private String filePath;
@@ -17,9 +17,9 @@ public class EBook {
      * Konstruktor 1: Für NEUE E-Books (ohne ID).
      * Die ID wird automatisch auf 0 gesetzt und später von der DB per Auto-Increment vergeben.
      */
-    public EBook(String title, String isbn, String filePath, int fileFormatId, String coverPath, String readingStatus,
-            int rating, int pageCount, String addedAt, Integer publisherId) {
-        setId(0); // Neu, noch nicht in der Datenbank
+    public EBook(String title, String isbn, String filePath, int fileFormatId, String coverPath, 
+                 String readingStatus, int rating, int pageCount, Integer publisherId) {
+        setId(null);
         setTitle(title);
         setIsbn(isbn);
         setFilePath(filePath);
@@ -28,7 +28,7 @@ public class EBook {
         setReadingStatus(readingStatus);
         setRating(rating);
         setPageCount(pageCount);
-        setAddedAt(addedAt);
+        setAddedAt(null);
         setPublisherId(publisherId);
     }
 
@@ -36,8 +36,8 @@ public class EBook {
      * Konstruktor 2: Für BESTEHENDE E-Books (mit ID).
      * Wird vom Data Access Object genutzt, wenn Daten aus der Datenbank geladen werden.
      */
-    public EBook(int id, String title, String isbn, String filePath, int fileFormatId, String coverPath, String readingStatus,
-            int rating, int pageCount, String addedAt, Integer publisherId) {
+    public EBook(int id, String title, String isbn, String filePath, int fileFormatId, String coverPath, 
+                 String readingStatus, int rating, int pageCount, String addedAt, Integer publisherId) {
         setId(id);
         setTitle(title);
         setIsbn(isbn);
@@ -51,13 +51,13 @@ public class EBook {
         setPublisherId(publisherId);
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
-        if (id < 0) {
-            throw new IllegalArgumentException("Die ID darf nicht negativ sein.");
+    public void setId(Integer id) {
+        if (id != null && id <= 0) {
+            throw new IllegalArgumentException("Die E-Book-ID muss größer als 0 sein.");
         }
         this.id = id;
     }
@@ -172,10 +172,7 @@ public class EBook {
     }
 
     public void setAddedAt(String addedAt) {
-        if (addedAt == null || addedAt.trim().isEmpty()) {
-            throw new IllegalArgumentException("Das Hinzufügedatum darf nicht null oder leer sein.");
-        }
-        this.addedAt = addedAt;
+        this.addedAt = (addedAt != null) ? addedAt.trim() : null;
     }
 
     public Integer getPublisherId() {

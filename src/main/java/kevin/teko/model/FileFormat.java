@@ -10,7 +10,7 @@ public class FileFormat {
      * Die ID bleibt vorerst null, da die DB diese später generiert.
      */
     public FileFormat(String name, String mimeType) {
-        this.id = null;
+        setId(null);
         setName(name);
         setMimeType(mimeType);
     }

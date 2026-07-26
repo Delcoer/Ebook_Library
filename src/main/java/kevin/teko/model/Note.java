@@ -5,27 +5,30 @@ public class Note {
     private Integer ebookId;
     private String content;
     private int pageNumber;
+    private String createdAt;
 
     /**
      * Konstruktor 1: Für NEUE Notizen (wird in der GUI erstellt).
      * Die ID bleibt vorerst null, da die DB diese später generiert.
      */
-    public Note(Integer ebookId, String content, int pageNumber) {
-        this.id = null;
-        setEbookId(ebookId);
+    public Note(int ebookId, int page, String content) {
+        setId(null);
+        setEBookId(ebookId);
+        setPageNumber(page);
         setContent(content);
-        setPageNumber(pageNumber);
+        setCreatedAt(null);
     }
 
     /**
      * Konstruktor 2: Für EXISTIERENDE Notizen (aus der Datenbank geladen).
      * Hier muss die ID zwingend vorhanden sein.
      */
-    public Note(int id, Integer ebookId, String content, int pageNumber) {
+    public Note(int id, int ebookId, int page, String content, String createdAt) {
         setId(id);
-        setEbookId(ebookId);
+        setEBookId(ebookId);
+        setPageNumber(page);
         setContent(content);
-        setPageNumber(pageNumber);
+        setCreatedAt(createdAt);
     }
 
     public Integer getId() {
@@ -39,11 +42,11 @@ public class Note {
         this.id = id;
     }
 
-    public Integer getEbookId() {
+    public Integer getEBookId() {
         return ebookId;
     }
 
-    public void setEbookId(Integer ebookId) {
+    public void setEBookId(Integer ebookId) {
         if (ebookId == null || ebookId <= 0) {
             throw new IllegalArgumentException("Die Notiz muss einer gültigen E-Book-ID zugeordnet sein.");
         }
@@ -61,8 +64,16 @@ public class Note {
         this.content = content.trim();
     }
 
-    public int getPageNumber() {
+    public int getPage() {
         return pageNumber;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 
     public void setPageNumber(int pageNumber) {
