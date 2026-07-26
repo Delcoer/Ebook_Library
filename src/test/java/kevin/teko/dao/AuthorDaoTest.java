@@ -101,7 +101,7 @@ class AuthorDaoTest {
 
     @Test
     void testSaveNullThrowsException() {
-        // Überprüft, ob unsere Guard Clause ordnungsgemäß eine Exception wirft
+        // Überprüft, Guard Clause ordnungsgemäß eine Exception wirft
         assertThrows(IllegalArgumentException.class, () -> {
             authorDao.save(null);
         });
