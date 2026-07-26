@@ -42,7 +42,7 @@ public class Bookmark {
         this.id = id;
     }
 
-    public Integer getEbookId() {
+    public Integer getEBookId() {
         return ebookId;
     }
 
@@ -53,6 +53,10 @@ public class Bookmark {
         } else {
             this.title = title != null ? title.trim() : null;
         }
+    }
+    
+    public String getTitle() {
+        return title;
     }
 
     public void setEBookId(Integer ebookId) {
@@ -73,9 +77,6 @@ public class Bookmark {
         this.pageNumber = pageNumber;
     }
 
-    public String getTitle() { // WAR GEFEHLT: Getter für den Titel hinzugefügt
-        return title;
-    }
 
     public String getCreatedAt() {
         return createdAt;

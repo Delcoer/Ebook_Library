@@ -10,7 +10,7 @@ public class Author {
      * Die ID wird automatisch auf null gesetzt.
      */
     public Author(String firstName, String lastName) {
-        this.id = null; // Noch keine DB-ID vorhanden
+        setId(null); // Noch keine DB-ID vorhanden
         setFirstName(firstName);
         setLastName(lastName);
     }
