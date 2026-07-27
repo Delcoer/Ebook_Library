@@ -137,6 +137,27 @@ public class EBookDao implements BaseDao<EBook> {
         }
     }
 
+    public void linkAuthorToEBook(Integer ebookId, Integer authorId) {
+        if (ebookId == null || ebookId <= 0 || authorId == null || authorId <= 0) {
+            throw new IllegalArgumentException("Ungültige E-Book- oder Autoren-ID für die Verknüpfung.");
+        }
+
+        String sql = "INSERT OR IGNORE INTO EBook_Author (ebook_id, author_id) VALUES (?, ?)";
+
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, ebookId);
+            pstmt.setInt(2, authorId);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(
+                    "Fehler beim Verknüpfen von E-Book ID " + ebookId + " mit Autor ID " + authorId,
+                    e
+            );
+        }
+    }
+
     private EBook mapResultSetToEBook(ResultSet rs) throws SQLException {
         Integer publisherId = (Integer) rs.getObject("publisher_id");
 
