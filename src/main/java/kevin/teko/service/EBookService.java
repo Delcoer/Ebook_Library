@@ -5,6 +5,7 @@ import kevin.teko.dao.EBookDao;
 import kevin.teko.model.Author;
 import kevin.teko.model.EBook;
 
+import java.util.List;
 import java.util.Objects;
 
 public class EBookService {
@@ -22,7 +23,7 @@ public class EBookService {
      * Nimmt ein neues E-Book auf. 
      * Validiert die Daten, legt den Autor an und verknüpft beide in der Datenbank.
      */
-    public EBook registerNewEBook(EBook eBook, String autorVorname, String autorNachname) {
+    public EBook registerNewEBook(EBook eBook, String authorVorname, String authorNachname) {
         
         // 1. VALIDIERUNG (Ungültige Eingaben sofort blockieren)
         if (eBook.getTitle() == null || eBook.getTitle().isBlank()) {
@@ -31,14 +32,14 @@ public class EBookService {
         if (eBook.getFilePath() == null || eBook.getFilePath().isBlank()) {
             throw new IllegalArgumentException("Dateipfad muss angegeben werden!");
         }
-        if (autorNachname == null || autorNachname.isBlank()) {
+        if (authorNachname == null || authorNachname.isBlank()) {
             throw new IllegalArgumentException("Der Nachname des Autors ist erforderlich!");
         }
 
         // 2. ORCHESTRIERUNG (Ablauf koordinieren)
         
         // Schritt A: Autor in der Datenbank anlegen
-        Author newAuthor = new Author(autorVorname, autorNachname);
+        Author newAuthor = new Author(authorVorname, authorNachname);
         authorDao.save(newAuthor);
 
         // Schritt B: E-Book in der Datenbank anlegen
@@ -52,5 +53,9 @@ public class EBookService {
 
         // Das fertige Objekt mit generierter ID zurückgeben
         return eBook;
+    }
+
+    public List<EBook> getAllEBooks() {
+        return eBookDao.findAll();
     }
 }

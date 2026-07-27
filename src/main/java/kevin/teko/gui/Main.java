@@ -1,7 +1,7 @@
-package kevin.teko.database;
+package kevin.teko.gui;
 
 public class Main {
     public static void main(String[] args) {
-        App.main(args);
+        LibraryGUI.main(args);
     }
 }
