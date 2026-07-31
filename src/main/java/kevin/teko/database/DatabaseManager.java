@@ -16,7 +16,9 @@ import java.util.Set;
 
 public class DatabaseManager {
 
-    private static final String DB_URL = "jdbc:sqlite:ebook_library.db";
+    // Central absolute path to the SQLite database
+    private static final String DB_FILE_PATH = "/home/kev/Documents/Teko/Java_Code/Datenbanken_Project_Code/Projektarbeit__Code/application_teko_database/ebook_library.db";
+    private static final String DB_URL = "jdbc:sqlite:" + DB_FILE_PATH;
 
     public static Connection getConnection() throws SQLException {
         Connection conn = DriverManager.getConnection(DB_URL);
@@ -29,9 +31,8 @@ public class DatabaseManager {
         return conn;
     }
 
-
     public static void initializeDatabase() {
-        Path databasePath = Paths.get("ebook_library.db");
+        Path databasePath = Paths.get(DB_FILE_PATH);
         boolean databaseAlreadyExists = Files.exists(databasePath);
 
         try (Connection conn = getConnection()) {
@@ -40,7 +41,7 @@ public class DatabaseManager {
             } else if (!isCurrentSchema(conn)) {
                 resetDatabaseSchema(conn);
             }
-            System.out.println("Datenbank-Check erfolgreich: Datei ist einsatzbereit.");
+            System.out.println("Datenbank-Check erfolgreich: Datei ist einsatzbereit unter -> " + DB_FILE_PATH);
         } catch (SQLException e) {
             System.err.println("Fehler beim Datenbank-Check: " + e.getMessage());
         }

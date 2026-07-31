@@ -6,14 +6,18 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import kevin.teko.dao.AuthorDao;
 import kevin.teko.dao.EBookDao;
 import kevin.teko.database.DatabaseManager;
 import kevin.teko.model.EBook;
 import kevin.teko.service.EBookService;
 
+import java.io.File;
 import java.time.LocalDateTime;
 
 public class LibraryGUI extends Application {
@@ -24,6 +28,10 @@ public class LibraryGUI extends Application {
     @Override
     public void init() throws Exception {
         // Backend-Schichten beim Anwendungsstart initialisieren
+
+        java.io.File dbFile = new java.io.File("library.db"); // Passe "library.db" an deinen Dateinamen an
+        System.out.println(">>> ECHTER DATENBANK-PFAD: " + dbFile.getAbsolutePath());
+
         DatabaseManager.initializeDatabase();
         EBookDao eBookDao = new EBookDao();
         AuthorDao authorDao = new AuthorDao();
@@ -41,7 +49,7 @@ public class LibraryGUI extends Application {
         // Formular zum Anlegen eines neuen E-Books
         GridPane formGrid = createFormGrid();
 
-        // Anzeige-Bereich (Platzhalter für Liste / Tabelle)
+        // Anzeige-Bereich
         VBox centerArea = new VBox(10);
         Label titleLabel = new Label("Meine E-Books");
         titleLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
@@ -54,7 +62,7 @@ public class LibraryGUI extends Application {
         root.setCenter(centerArea);
         BorderPane.setMargin(centerArea, new Insets(0, 0, 0, 15));
 
-        Scene scene = new Scene(root, 800, 500);
+        Scene scene = new Scene(root, 850, 500);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -68,6 +76,15 @@ public class LibraryGUI extends Application {
         // Eingabefelder
         TextField tfTitel = new TextField();
         TextField tfPfad = new TextField();
+        tfPfad.setPromptText("Pfad wählen oder eintragen...");
+        tfPfad.setPrefWidth(200);
+
+        // FileChooser-Button direkt neben dem Pfad-Feld
+        Button btnBrowse = new Button("Durchsuchen...");
+        btnBrowse.setOnAction(e -> handleSelectFile(tfPfad, btnBrowse));
+
+        HBox pathBox = new HBox(5, tfPfad, btnBrowse);
+
         TextField tfVorname = new TextField();
         TextField tfNachname = new TextField();
         Button btnSave = new Button("E-Book Speichern");
@@ -77,7 +94,7 @@ public class LibraryGUI extends Application {
         grid.add(tfTitel, 1, 1);
 
         grid.add(new Label("Dateipfad:"), 0, 2);
-        grid.add(tfPfad, 1, 2);
+        grid.add(pathBox, 1, 2);
 
         grid.add(new Label("Autor Vorname:"), 0, 3);
         grid.add(tfVorname, 1, 3);
@@ -88,9 +105,6 @@ public class LibraryGUI extends Application {
         grid.add(btnSave, 1, 5);
 
         // Action-Handler für den Speichern-Button
-
-
-        
         btnSave.setOnAction(e -> {
             try {
                 EBook newBook = new EBook(
@@ -105,7 +119,7 @@ public class LibraryGUI extends Application {
                         null);
                 newBook.setAddedAt(LocalDateTime.now().toString());
 
-                // Aufruf deiner Service-Schicht!
+                // Aufruf der Service-Schicht
                 eBookService.registerNewEBook(newBook, tfVorname.getText(), tfNachname.getText());
 
                 // Erfolgsmeldung & Felder leeren
@@ -117,19 +131,35 @@ public class LibraryGUI extends Application {
                 tfNachname.clear();
 
             } catch (IllegalArgumentException ex) {
-                // Fängt deine Validierungs-Fehler aus dem EBookService sauber ab!
                 String realCause = ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage();
-                showAlert(Alert.AlertType.ERROR, "Fehler beim Speichern", realCause);
-                //ex.printStackTrace();
-                //showAlert(Alert.AlertType.ERROR, "Validierungsfehler", ex.getMessage());
+                showAlert(Alert.AlertType.ERROR, "Validierungsfehler", realCause);
             } catch (Exception ex) {
                 String realCause = ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage();
                 showAlert(Alert.AlertType.ERROR, "Fehler beim Speichern", realCause);
-                //showAlert(Alert.AlertType.ERROR, "Fehler", "Fehler beim Speichern: " + ex.getMessage());
             }
         });
 
         return grid;
+    }
+
+    // Hilfsmethode für den FileChooser
+    private void handleSelectFile(TextField targetTextField, Button sourceButton) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("E-Book Datei auswählen");
+
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("E-Books (*.pdf, *.epub)", "*.pdf", "*.epub"),
+                new FileChooser.ExtensionFilter("PDF Dateien (*.pdf)", "*.pdf"),
+                new FileChooser.ExtensionFilter("EPUB Dateien (*.epub)", "*.epub"),
+                new FileChooser.ExtensionFilter("Alle Dateien", "*.*")
+        );
+
+        Window stage = sourceButton.getScene().getWindow();
+        File selectedFile = fileChooser.showOpenDialog(stage);
+
+        if (selectedFile != null) {
+            targetTextField.setText(selectedFile.getAbsolutePath());
+        }
     }
 
     private void showAlert(Alert.AlertType type, String title, String message) {
@@ -147,8 +177,7 @@ public class LibraryGUI extends Application {
                             String addedAt = ebook.getAddedAt() != null ? ebook.getAddedAt() : "ohne Datum";
                             return ebook.getId() + " - " + ebook.getTitle() + " (" + addedAt + ")";
                         })
-                        .toList()
-        );
+                        .toList());
     }
 
     public static void main(String[] args) {
