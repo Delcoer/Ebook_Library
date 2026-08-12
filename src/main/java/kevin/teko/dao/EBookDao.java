@@ -10,7 +10,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EBookDao implements BaseDao<EBook> {
 
@@ -135,6 +137,24 @@ public class EBookDao implements BaseDao<EBook> {
         } catch (SQLException e) {
             throw new RuntimeException("Fehler beim Löschen des E-Books mit ID " + id, e);
         }
+    }
+
+    public Map<String, Long> countByReadingStatus() {
+        String sql = "SELECT reading_status, COUNT(*) AS ebook_count FROM EBook GROUP BY reading_status ORDER BY reading_status";
+        Map<String, Long> counts = new LinkedHashMap<>();
+
+        try (Connection conn = DatabaseManager.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                counts.put(rs.getString("reading_status"), rs.getLong("ebook_count"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Fehler beim Ermitteln der E-Book-Statistik.", e);
+        }
+
+        return counts;
     }
 
     public void linkAuthorToEBook(Integer ebookId, Integer authorId) {

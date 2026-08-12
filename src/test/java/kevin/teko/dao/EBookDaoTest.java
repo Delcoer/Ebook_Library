@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -142,5 +143,26 @@ class EBookDaoTest {
         ebookDao.delete(id);
 
         assertNull(ebookDao.findById(id));
+    }
+
+    @Test
+    void testCountByReadingStatus() {
+        EBook first = new EBook("A", "123456789X", "/books/a.epub", 1, null, "NOT_STARTED", 0, 10, null);
+        first.setAddedAt("2026-07-26 12:00:00");
+        ebookDao.save(first);
+
+        EBook second = new EBook("B", "1234567890", "/books/b.epub", 1, null, "READING", 1, 20, null);
+        second.setAddedAt("2026-07-26 12:00:01");
+        ebookDao.save(second);
+
+        EBook third = new EBook("C", "1234567891", "/books/c.epub", 1, null, "READING", 2, 30, null);
+        third.setAddedAt("2026-07-26 12:00:02");
+        ebookDao.save(third);
+
+        Map<String, Long> counts = ebookDao.countByReadingStatus();
+
+        assertEquals(2, counts.size());
+        assertEquals(1L, counts.get("NOT_STARTED"));
+        assertEquals(2L, counts.get("READING"));
     }
 }

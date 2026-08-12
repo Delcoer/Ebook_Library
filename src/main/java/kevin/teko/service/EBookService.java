@@ -6,6 +6,7 @@ import kevin.teko.model.Author;
 import kevin.teko.model.EBook;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class EBookService {
@@ -89,5 +90,9 @@ public class EBookService {
 
     public List<EBook> getAllEBooks() {
         return eBookDao.findAll();
+    }
+
+    public Map<String, Long> getEBookCountByReadingStatus() {
+        return eBookDao.countByReadingStatus();
     }
 }
