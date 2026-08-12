@@ -147,4 +147,72 @@ class EBookServiceTest {
 
         assertEquals("Der Nachname des Autors ist erforderlich!", exception.getMessage());
     }
+
+    @Test
+    @DisplayName("E-Book wird erfolgreich aktualisiert")
+    void updateEBook_Success() {
+        EBook book = new EBook(
+                "Old Title",
+                null,
+                "/path/to/book.epub",
+                fileFormatId,
+                null,
+                "NOT_STARTED",
+                0,
+                120,
+                null
+        );
+        book.setAddedAt("2026-07-27 12:00:00");
+        eBookDao.save(book);
+
+        EBook updated = new EBook(
+                book.getId(),
+                "Updated Title",
+                "1234567890",
+                "/path/to/updated.epub",
+                fileFormatId,
+                "/covers/updated.png",
+                "READING",
+                3,
+                180,
+                "2026-07-27 12:30:00",
+                null
+        );
+
+        EBook result = eBookService.updateEBook(updated);
+
+        assertEquals(book.getId(), result.getId());
+        EBook persisted = eBookDao.findById(book.getId());
+        assertNotNull(persisted);
+        assertEquals("Updated Title", persisted.getTitle());
+        assertEquals("1234567890", persisted.getIsbn());
+        assertEquals("/path/to/updated.epub", persisted.getFilePath());
+        assertEquals("/covers/updated.png", persisted.getCoverPath());
+        assertEquals("READING", persisted.getReadingStatus());
+        assertEquals(3, persisted.getRating());
+        assertEquals(180, persisted.getPageCount());
+        assertEquals("2026-07-27 12:30:00", persisted.getAddedAt());
+    }
+
+    @Test
+    @DisplayName("E-Book wird erfolgreich gelöscht")
+    void deleteEBook_Success() {
+        EBook book = new EBook(
+                "To Delete",
+                null,
+                "/path/to/delete.epub",
+                fileFormatId,
+                null,
+                "NOT_STARTED",
+                0,
+                90,
+                null
+        );
+        book.setAddedAt("2026-07-27 12:45:00");
+        eBookDao.save(book);
+
+        eBookService.deleteEBook(book.getId());
+
+        assertNull(eBookDao.findById(book.getId()));
+    }
 }

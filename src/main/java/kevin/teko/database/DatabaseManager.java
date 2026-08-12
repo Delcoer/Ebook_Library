@@ -41,6 +41,7 @@ public class DatabaseManager {
             } else if (!isCurrentSchema(conn)) {
                 resetDatabaseSchema(conn);
             }
+            ensureReferenceData(conn);
             System.out.println("Datenbank-Check erfolgreich: Datei ist einsatzbereit unter -> " + DB_FILE_PATH);
         } catch (SQLException e) {
             System.err.println("Fehler beim Datenbank-Check: " + e.getMessage());
@@ -102,6 +103,33 @@ public class DatabaseManager {
             stmt.execute("PRAGMA foreign_keys = ON");
         } catch (IOException e) {
             throw new SQLException("Fehler beim Erstellen des Datenbankschemas.", e);
+        }
+    }
+
+    private static void ensureReferenceData(Connection conn) throws SQLException {
+        String[] seedStatements = {
+                "INSERT OR IGNORE INTO FileFormat (id, name) VALUES (1, 'PDF')",
+                "INSERT OR IGNORE INTO FileFormat (id, name) VALUES (2, 'EPUB')",
+                "INSERT OR IGNORE INTO FileFormat (id, name) VALUES (3, 'MOBI')",
+                "INSERT OR IGNORE INTO FileFormat (id, name) VALUES (4, 'AZW3')",
+                "INSERT OR IGNORE INTO Publisher (id, name) VALUES (1, 'Eigenverlag / Unbekannt')",
+                "INSERT OR IGNORE INTO Publisher (id, name) VALUES (2, 'Rheinwerk Verlag')",
+                "INSERT OR IGNORE INTO Publisher (id, name) VALUES (3, 'O''Reilly Media')",
+                "INSERT OR IGNORE INTO Tag (id, name) VALUES (1, 'Programmierung')",
+                "INSERT OR IGNORE INTO Tag (id, name) VALUES (2, 'Java')",
+                "INSERT OR IGNORE INTO Tag (id, name) VALUES (3, 'Datenbanken')",
+                "INSERT OR IGNORE INTO Collection (id, name) VALUES (1, 'Favoriten')",
+                "INSERT OR IGNORE INTO Collection (id, name) VALUES (2, 'Fachliteratur')",
+                "INSERT OR IGNORE INTO Author (id, first_name, last_name) VALUES (1, 'Joshua', 'Bloch')",
+                "INSERT OR IGNORE INTO Author (id, first_name, last_name) VALUES (2, 'Robert C.', 'Martin')"
+        };
+
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute("PRAGMA foreign_keys = OFF");
+            for (String seedStatement : seedStatements) {
+                stmt.execute(seedStatement);
+            }
+            stmt.execute("PRAGMA foreign_keys = ON");
         }
     }
 

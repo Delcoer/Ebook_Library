@@ -32,6 +32,9 @@ public class EBookService {
         if (eBook.getFilePath() == null || eBook.getFilePath().isBlank()) {
             throw new IllegalArgumentException("Dateipfad muss angegeben werden!");
         }
+        if (eBook.getAddedAt() == null || eBook.getAddedAt().isBlank()) {
+            throw new IllegalArgumentException("Der Zeitpunkt der Aufnahme darf nicht leer sein!");
+        }
         if (authorNachname == null || authorNachname.isBlank()) {
             throw new IllegalArgumentException("Der Nachname des Autors ist erforderlich!");
         }
@@ -53,6 +56,35 @@ public class EBookService {
 
         // Das fertige Objekt mit generierter ID zurückgeben
         return eBook;
+    }
+
+    public EBook updateEBook(EBook eBook) {
+        if (eBook == null) {
+            throw new IllegalArgumentException("Das zu aktualisierende E-Book darf nicht null sein.");
+        }
+        if (eBook.getId() == null || eBook.getId() <= 0) {
+            throw new IllegalArgumentException("Eine gültige E-Book-ID ist für das Update erforderlich.");
+        }
+        if (eBook.getTitle() == null || eBook.getTitle().isBlank()) {
+            throw new IllegalArgumentException("E-Book Titel darf nicht leer sein!");
+        }
+        if (eBook.getFilePath() == null || eBook.getFilePath().isBlank()) {
+            throw new IllegalArgumentException("Dateipfad muss angegeben werden!");
+        }
+        if (eBook.getAddedAt() == null || eBook.getAddedAt().isBlank()) {
+            throw new IllegalArgumentException("Der Zeitpunkt der Aufnahme darf nicht leer sein!");
+        }
+
+        eBookDao.update(eBook);
+        return eBook;
+    }
+
+    public void deleteEBook(int ebookId) {
+        if (ebookId <= 0) {
+            throw new IllegalArgumentException("Die E-Book-ID muss größer als 0 sein.");
+        }
+
+        eBookDao.delete(ebookId);
     }
 
     public List<EBook> getAllEBooks() {

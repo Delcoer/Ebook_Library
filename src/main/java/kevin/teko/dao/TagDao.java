@@ -18,7 +18,7 @@ public class TagDao implements BaseDao<Tag> {
         String sql = "INSERT INTO Tag (name) VALUES (?)";
 
         try (Connection conn = DatabaseManager.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             pstmt.setString(1, tag.getName());
             pstmt.executeUpdate();
@@ -38,7 +38,7 @@ public class TagDao implements BaseDao<Tag> {
         String sql = "SELECT id, name FROM Tag WHERE id = ?";
 
         try (Connection conn = DatabaseManager.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, id);
 
@@ -59,8 +59,8 @@ public class TagDao implements BaseDao<Tag> {
         String sql = "SELECT id, name FROM Tag ORDER BY name";
 
         try (Connection conn = DatabaseManager.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
                 tags.add(new Tag(rs.getInt("id"), rs.getString("name")));
@@ -76,7 +76,7 @@ public class TagDao implements BaseDao<Tag> {
         String sql = "UPDATE Tag SET name = ? WHERE id = ?";
 
         try (Connection conn = DatabaseManager.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, tag.getName());
             pstmt.setInt(2, tag.getId());
@@ -91,7 +91,7 @@ public class TagDao implements BaseDao<Tag> {
         String sql = "DELETE FROM Tag WHERE id = ?";
 
         try (Connection conn = DatabaseManager.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, id);
             pstmt.executeUpdate();
@@ -105,7 +105,7 @@ public class TagDao implements BaseDao<Tag> {
         String sql = "INSERT OR IGNORE INTO EBook_Tag (ebook_id, tag_id) VALUES (?, ?)";
 
         try (Connection conn = DatabaseManager.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, ebookId);
             pstmt.setInt(2, tagId);
@@ -119,7 +119,7 @@ public class TagDao implements BaseDao<Tag> {
         String sql = "DELETE FROM EBook_Tag WHERE ebook_id = ? AND tag_id = ?";
 
         try (Connection conn = DatabaseManager.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, ebookId);
             pstmt.setInt(2, tagId);
@@ -132,11 +132,11 @@ public class TagDao implements BaseDao<Tag> {
     public List<Tag> findTagsByEBookId(int ebookId) {
         List<Tag> tags = new ArrayList<>();
         String sql = "SELECT t.id, t.name FROM Tag t " +
-                     "JOIN EBook_Tag et ON t.id = et.tag_id " +
-                     "WHERE et.ebook_id = ? ORDER BY t.name";
+                "JOIN EBook_Tag et ON t.id = et.tag_id " +
+                "WHERE et.ebook_id = ? ORDER BY t.name";
 
         try (Connection conn = DatabaseManager.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, ebookId);
 
