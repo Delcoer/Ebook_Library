@@ -11,9 +11,14 @@ Ein JavaFX-basiertes Desktop-Anwendungsprojekt zur Verwaltung und Interaktion mi
 * **Datenbank:** SQLite (`sqlite-jdbc`)
 * **Build-Tool:** Apache Maven
 * **Entwicklungsumgebung:** VS Code / Fedora Linux
+* **Extension:** Extension Pack for Java
 
-**Java Development Kit (JDK)**
 ---
+
+## Java Development Kit (JDK)
+
+Da die Applikation nicht kompileirt ist, wird das JDK benötigt: [JDK 21 – Eclipse Temurin herunterladen](https://adoptium.net/temurin/releases/?version=21)
+
 
 ## Anpassen von Statischen Datenbank Pfad
 
