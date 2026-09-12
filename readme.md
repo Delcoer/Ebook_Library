@@ -12,6 +12,7 @@ Ein JavaFX-basiertes Desktop-Anwendungsprojekt zur Verwaltung und Interaktion mi
 * **Build-Tool:** Apache Maven
 * **Entwicklungsumgebung:** VS Code / Fedora Linux
 
+**Java Development Kit (JDK)**
 ---
 
 ## Anpassen von Statischen Datenbank Pfad
