@@ -17,7 +17,7 @@ Ein JavaFX-basiertes Desktop-Anwendungsprojekt zur Verwaltung und Interaktion mi
 
 ## Java Development Kit (JDK)
 
-Da die Applikation nicht kompileirt ist, wird das JDK benötigt: [JDK 21 – Eclipse Temurin herunterladen](https://adoptium.net/temurin/releases/?version=21)
+Da die Applikation nicht kompiliert ist, wird das JDK benötigt: [JDK 21 – Eclipse Temurin herunterladen](https://adoptium.net/temurin/releases/?version=21)
 
 
 ## Anpassen von Statischen Datenbank Pfad
