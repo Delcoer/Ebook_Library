@@ -50,9 +50,9 @@ Das `javafx-maven-plugin` automatisiert diesen Prozess komplett, indem es die Ab
    
 <img width="396" height="187" alt="grafik" src="https://github.com/user-attachments/assets/45dd8279-6e0f-4e5e-8972-57ceaf0e7b3b" />
    
-3. Navigiere zum Projekt `application_teko_database` -> **Plugins** -> **javafx**:
+2. Navigiere zum Projekt `application_teko_database` -> **Plugins** -> **javafx**:
    
-5. Mache einen **Rechtsklick** auf `javafx:run` und wähle **Run**.
+3. Mache einen **Rechtsklick** auf `javafx:run` und wähle **Run**.
 
 <img width="503" height="270" alt="grafik" src="https://github.com/user-attachments/assets/ca6ecaac-1fba-4237-88d3-c0479af13b1b" />
 
