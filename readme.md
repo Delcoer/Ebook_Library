@@ -15,16 +15,29 @@ Ein JavaFX-basiertes Desktop-Anwendungsprojekt zur Verwaltung und Interaktion mi
 
 ---
 
-## Java Development Kit (JDK)
+## Java Development Kit (JDK) & Maven
 
 Da die Applikation nicht kompiliert ist, wird das JDK benötigt: [JDK 21 – Eclipse Temurin herunterladen](https://adoptium.net/temurin/releases/?version=21)
 
+Für Apache Maven gibt es **zwei gleichwertige Alternativen** – du brauchst nur eine davon:
 
-## Anpassen von Statischen Datenbank Pfad
+* **Alternative A – Maven selbst installieren:** [Maven herunterladen & installieren](https://maven.apache.org/install.html). Damit funktionieren sowohl Option 1 (VS Code Maven-Panel) als auch Option 2 (Terminal-Befehl).
+* **Alternative B – VS Code Extension nutzen:** Die im "Extension Pack for Java" enthaltene "Maven for Java"-Extension bringt bei Bedarf eine eigene, gebündelte Maven-Version mit, falls keine auf dem System gefunden wird. Damit ist keine separate Installation nötig – **dies funktioniert aber nur mit Option
+1 (VS Code Maven-Panel), nicht mit dem Terminal-Befehl aus Option 2.**
 
-Im DatabaseManager muss die Konstante für den Datenbank Pfad angepasst werden!
+---
 
-private static final String DB_FILE_PATH = **"/home/kev/Documents/Teko/Modul_Datenbanken/Datenbanken_Project_Code/Projektarbeit__Code/ebook_library.db";**
+## Anpassen des statischen Datenbank-Pfads (WICHTIG)
+
+Im `DatabaseManager` muss die Konstante für den Datenbank-Pfad angepasst werden. Ersetze den Pfad durch einen beliebigen Speicherort auf deinem eigenen System – die Datei muss nicht existieren, sie wird beim ersten Start automatisch erstellt.
+
+```java
+private static final String DB_FILE_PATH = "/home/kev/Documents/Teko/Modul_Datenbanken/Datenbanken_Project_Code/Projektarbeit__Code/ebook_library.db";
+```
+
+**Windows-Beispiel:** `C:/Users/DEINNAME/ebook_library.db` (normale Schrägstriche funktionieren in Java auch unter Windows)
+
+---
 
 ## Projekt starten & Technische Hintergründe
 
